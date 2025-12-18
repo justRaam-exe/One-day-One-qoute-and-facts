@@ -13,7 +13,8 @@
             <p class="subtitle">One day One Qoutes and Fact</p>
         </header>
 
-        <div class="card">
+        <!-- Qoute Section -->
+        <div class="card qoute-card">
             <div class="card-header">
                 <h2>Qoute of the Day</h2>
             </div>
@@ -22,8 +23,35 @@
                 <p id="qoute-text" class="qoute-text">Loading your Qoute...</p>
                 <p id="qoute-author" class="qoute-author">- Unknown</p>
             </div>
+            <div class="button-group">
+                <button id="new-qoute-btn" class="btn btn-primary">New Qoute</button>
+                <button id="copy-qoute-btn" class="btn btn-secondary">Copy</button>
+            </div>
         </div>
+
+        <!-- Fact Section -->
+        <div class="card fact-card">
+            <div class="card-header">
+                <h2>One Day One Fact</h2>
+            </div>
+            <div class="card-content">
+                <div class="icon-fact">!</div>
+                <p id="fact-text" class="fact-text">Loading Interesting fact...</p>
+            </div>
+            <div class="button-group">
+                <button id="new-fact-btn" class="btn btn-primary">New Fact</button>
+                <button id="copy-fact-btn" class="btn btn-secondary">Copy</button>
+                <button id="share-fact-btn" class="btn btn-success">Share</button>
+            </div>
+        </div>
+
+        <!-- footer section -->
+         <footer class="footer">
+            <p>Byte Snack - Informatics Engineering</p>
+         </footer>
     </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
 
     <script src="script.js"></script>
 </body>
