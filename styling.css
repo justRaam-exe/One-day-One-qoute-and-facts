@@ -131,6 +131,7 @@ body {
     gap: 8px;
     flex: 1;
     justify-content: center;
+    min-width: 120px;
 }
 
 .btn span {
@@ -252,7 +253,7 @@ body {
     }
 
     .subtitle {
-        font-size: 166px;
+        font-size: 16px;
     }
 
     .card {
