@@ -1,11 +1,11 @@
-const QOUTE_API = 'https://api.quotable.io/random';
+const QUOTE_API = 'https://api.quotable.io/random';
 const FACT_API = 'https://uselessfacts.jsph.pl/random.json?language=en';
 
-const qouteText = document.getElementById('qoute-text');
-const qouteAuthor = document.getElementById('qoute-author');
-const newQouteBtn = document.getElementById('new-qoute-btn');
-const copyQouteBtn = document.getElementById('copy-qoute-btn');
-const qouteCard = document.querySelector('qoute-card');
+const quoteText = document.getElementById('quote-text');
+const quoteAuthor = document.getElementById('quote-author');
+const newQuoteBtn = document.getElementById('new-quote-btn');
+const copyQuoteBtn = document.getElementById('copy-quote-btn');
+const quoteCard = document.querySelector('.quote-card');
 
 const factText = document.getElementById('fact-text');
 const newFactBtn = document.getElementById('new-fact-btn');
@@ -15,7 +15,7 @@ const factCard = document.querySelector('fact-card');
 
 const toast = document.getElementById('toast');
 
-let currentQoute = { text: '', author: '' };
+let currentQuote = { text: '', author: '' };
 let currentFact = '';
 
 // Get today's date in string YYYY-MM-DD format
@@ -36,14 +36,14 @@ function updateLastVisitDate() {
     localStorage.setItem('lastVisitDate', getTodayDate());
 }
 
-// Save Qoute to Local Storage
-function saveQouteToStorage(qoute) {
-    localStorage.setItem('dailyQoute', JSON.stringify(qoute));
+// Save Quote to Local Storage
+function saveQuoteToStorage(quote) {
+    localStorage.setItem('dailyQuote', JSON.stringify(quote));
 }
 
-// Get qoute from local storage
-function getQouteFromStorage() {
-    const saved = localStorage.getItem('dailyQoute');
+// Get quote from local storage
+function getQuoteFromStorage() {
+    const saved = localStorage.getItem('dailyQuote');
     return saved ? JSON.parse(saved) : null;
 }
 
@@ -57,51 +57,51 @@ function getFactFromStorage() {
     return localStorage.getItem('dailyFact');
 }
 
-async function fetchQoute() {
+async function fetchQuote() {
     if (!forceNew && !isNewDay()) {
-        const cachedQoute = getQouteFromStorage();
-        if (cachedQoute) {
-            currentQoute = cachedQoute;
-            displayQoute();
+        const cachedQuote = getQuoteFromStorage();
+        if (cachedQuote) {
+            currentQuote = cachedQuote;
+            displayQuote();
             return;
         }
     }
 
     try {
-        qouteCard.classList.add('loading');
-        newQouteBtn.disabled = true;
-        const response = await fetch(QOUTE_API);
+        quoteCard.classList.add('loading');
+        newQuoteBtn.disabled = true;
+        const response = await fetch(QUOTE_API);
 
         if (!response.ok) {
-            throw new Error('Failed to fetch qoute');
+            throw new Error('Failed to fetch quote');
         }
         const data = await response.json();
-        currentQoute = {
+        currentQuote = {
             text: data.content,
             author: data.author
         };
-        saveQouteToStorage(currentQoute);
-        displayQoute();
+        saveQuoteToStorage(currentQuote);
+        displayQuote();
     } catch (error) {
-        console.error('Error fetching qoute:', error);
-        qouteText.textContent = 'Could not load qoute. Please try again.';
-        qouteAuthor.textContent = '';
+        console.error('Error fetching quote:', error);
+        quoteText.textContent = 'Could not load quote. Please try again.';
+        quoteAuthor.textContent = '';
     } finally {
-        qouteCard.classList.remove('loading');
-        newQouteBtn.disabled = false;
+        quoteCard.classList.remove('loading');
+        newQuoteBtn.disabled = false;
     }
 }
 
-function displayQoute() {
-    qouteText.textContent = `"${currentQoute.text}"`;
-    qouteAuthor.textContent = `- ${currentQoute.author}`;
+function displayQuote() {
+    quoteText.textContent = `"${currentQuote.text}"`;
+    quoteAuthor.textContent = `- ${currentQuote.author}`;
 }
 
-async function copyQoute() {
-    const textToCopy = `"${currentQoute.text}" - ${currentQoute.author}`;
+async function copyQuote() {
+    const textToCopy = `"${currentQuote.text}" - ${currentQuote.author}`;
     try {
         await navigator.clipboard.writeText(textToCopy);
-        showToast('Qoute copied to clipboard!');
+        showToast('Quote copied to clipboard!');
     } catch (error) {
         const textArea = document.createElement('textarea');
         textArea.value = textToCopy;
@@ -109,13 +109,13 @@ async function copyQoute() {
         textArea.select();
         document.execCommand('copy');
         document.body.removeChild(textArea);
-        showToast('Qoute copied to clipboard!');
+        showToast('Quote copied to clipboard!');
     }
 }
 
-function getNewQoute() {
-    fetchQoute(true);
-    showToast('Loading new qoute...');
+function getNewQuote() {
+    fetchQuote(true);
+    showToast('Loading new quote...');
 }
 
 async function fetchFact() {
@@ -199,17 +199,17 @@ function initializeApp() {
     if (isNewDay()) {
         console.log('New day detected. Fetching new content...');
         updateLastVisitDate();
-        fetchQoute(true);
+        fetchQuote(true);
         fetchFact(true);
     } else {
         console.log('Still the same day. Loading cached content...');
-        fetchQoute(false);
+        fetchQuote(false);
         fetchFact(false);
     }
 }
 
-newQouteBtn.addEventListener('click', getNewQoute);
-copyQouteBtn.addEventListener('click', copyQoute);
+newQuoteBtn.addEventListener('click', getNewQuote);
+copyQuoteBtn.addEventListener('click', copyQuote);
 
 newFactBtn.addEventListener('click', getNewFact);
 copyFactBtn.addEventListener('click', copyFact);
@@ -217,7 +217,7 @@ shareFactBtn.addEventListener('click', shareFact);
 
 document.addEventListener('keydown', (e) => {
     if (e.key === 'q' || e.key === 'Q') {
-        getNewQoute();
+        getNewQuote();
     }
     if (e.key === 'f' || e.key === 'F') {
         getNewFact();
@@ -230,7 +230,7 @@ document.addEventListener('visibilitychange', () => {
     if (!document.hidden && isNewDay()) {
         console.log('Page visible & new day... refreshing content...');
         updateLastVisitDate();
-        fetchQoute(true);
+        fetchQuote(true);
         fetchFact(true);
         showToast('Welcome new day! new inspirations!');
     }

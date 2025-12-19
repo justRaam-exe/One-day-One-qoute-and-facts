@@ -71,7 +71,7 @@ body {
     position: relative;
 }
 
-.icon-qoute {
+.icon-quote {
     font-size: 60px;
     color: #667eea;
     opacity: 0.2;
@@ -79,7 +79,7 @@ body {
     margin-bottom: 20px;
 }
 
-.qoute-text {
+.quote-text {
     font-size: 22px;
     color: #333;
     text-align: center;
@@ -88,7 +88,7 @@ body {
     animation: fadeIn 0.6s ease;
 }
 
-.qoute-author {
+.quote-author {
     font-size: 18px;
     color: #667eea;
     text-align: right;
@@ -264,11 +264,11 @@ body {
         font-size: 24px;
     }
 
-    .qoute-text {
+    .quote-text {
         font-size: 18px;
     }
 
-    .qoute-author {
+    .quote-author {
         font-size: 16px;
     }
 
