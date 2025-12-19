@@ -86,5 +86,34 @@ async function fetchQoute() {
         console.error('Error fetching qoute:', error);
         qouteText.textContent = 'Could not load qoute. Please try again.';
         qouteAuthor.textContent = '';
+    } finally {
+        qouteCard.classList.remove('loading');
+        newQouteBtn.disabled = false;
     }
+}
+
+function displayQoute() {
+    qouteText.textContent = `"${currentQoute.text}"`;
+    qouteAuthor.textContent = `- ${currentQoute.author}`;
+}
+
+async function copyQoute() {
+    const textToCopy = `"${currentQoute.text}" - ${currentQoute.author}`;
+    try {
+        await navigator.clipboard.writeText(textToCopy);
+        showToast('Qoute copied to clipboard!');
+    } catch (error) {
+        const textArea = document.createElement('textarea');
+        textArea.value = textToCopy;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        showToast('Qoute copied to clipboard!');
+    }
+}
+
+function getNewQoute() {
+    fetchQoute(true);
+    showToast('Loading new qoute...');
 }
