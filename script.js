@@ -117,3 +117,121 @@ function getNewQoute() {
     fetchQoute(true);
     showToast('Loading new qoute...');
 }
+
+async function fetchFact() {
+    if (!forceNew && !isNewDay()) {
+        const cachedFact = getFactFromStorage();
+        if (cachedFact) {
+            currentFact = cachedFact;
+            displayFact();
+            return;
+        }
+    }
+
+    try {
+        factCard.classList.add('loading');
+        newFactBtn.disabled = true;
+        const response = await fetch(FACT_API);
+        if (!response.ok) {
+            throw new Error('Failed to fetch fact');
+        }
+        const data = await response.json();
+        currentFact = data.text;
+
+        saveFactToStorage(currentFact);
+        displayFact();
+    } catch (error) {
+        console.error('Error fetching fact:', error);
+        factText.textContent = 'Could not load fact. Please try again.';
+    } finally {
+        factCard.classList.remove('loading');
+        newFactBtn.disabled = false;
+    }
+}
+
+function displayFact() {
+    factText.textContent = currentFact;
+}
+
+async function copyFact() {
+    try {
+        await navigator.clipboard.writeText(currentFact);
+        showToast('Fact copied to clipboard!');
+    } catch (error) {
+        const textArea = document.createElement('textarea');
+        textArea.value = currentFact;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        showToast('Fact copied to clipboard!');
+    }
+}
+
+function shareFact() {
+    if (navigator.share) {
+        navigator.share({
+            title: 'Did you know?',
+            text: currentFact
+        })
+        .then(() => console.log('Fact shared Successfully'))
+        .catch((error) => console.log('Error sharing fact:', error)); 
+    } else {
+        copyFact();
+    }
+}
+
+function getNewFact() {
+    fetchFact(true);
+    showToast('Loading new fact...');
+}
+
+function showToast(message) {
+    toast.textContent = message;
+    toast.classList.add('show');
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+
+function initializeApp() {
+    console.log('Initializing Byte Snack App...');
+    if (isNewDay()) {
+        console.log('New day detected. Fetching new content...');
+        updateLastVisitDate();
+        fetchQoute(true);
+        fetchFact(true);
+    } else {
+        console.log('Still the same day. Loading cached content...');
+        fetchQoute(false);
+        fetchFact(false);
+    }
+}
+
+newQouteBtn.addEventListener('click', getNewQoute);
+copyQouteBtn.addEventListener('click', copyQoute);
+
+newFactBtn.addEventListener('click', getNewFact);
+copyFactBtn.addEventListener('click', copyFact);
+shareFactBtn.addEventListener('click', shareFact);
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'q' || e.key === 'Q') {
+        getNewQoute();
+    }
+    if (e.key === 'f' || e.key === 'F') {
+        getNewFact();
+    }
+});
+
+window.addEventListener('load', initializeApp);
+
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && isNewDay()) {
+        console.log('Page visible & new day... refreshing content...');
+        updateLastVisitDate();
+        fetchQoute(true);
+        fetchFact(true);
+        showToast('Welcome new day! new inspirations!');
+    }
+});
