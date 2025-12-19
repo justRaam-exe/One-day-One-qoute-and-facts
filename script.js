@@ -1,4 +1,4 @@
-const QUOTE_API = 'https://zenquotes.io/api/random';
+const QUOTE_API = 'https://quotes-api-brown.vercel.app/api/random';
 const FACT_API = 'https://uselessfacts.jsph.pl/random.json?language=en';
 
 const quoteText = document.getElementById('quote-text');
@@ -77,8 +77,8 @@ async function fetchQuote(forceNew = false) {
         }
         const data = await response.json();
         currentQuote = {
-            text: data[0].q,
-            author: data[0].a
+            text: data.text,
+            author: data.author
         };
         saveQuoteToStorage(currentQuote);
         displayQuote();
