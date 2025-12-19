@@ -1,4 +1,4 @@
-const QUOTE_API = 'https://api.quotable.io/random';
+const QUOTE_API = 'https://zenquotes.io/api/random';
 const FACT_API = 'https://uselessfacts.jsph.pl/random.json?language=en';
 
 const quoteText = document.getElementById('quote-text');
@@ -11,7 +11,7 @@ const factText = document.getElementById('fact-text');
 const newFactBtn = document.getElementById('new-fact-btn');
 const copyFactBtn = document.getElementById('copy-fact-btn');
 const shareFactBtn = document.getElementById('share-fact-btn');
-const factCard = document.querySelector('fact-card');
+const factCard = document.querySelector('.fact-card');
 
 const toast = document.getElementById('toast');
 
@@ -57,7 +57,7 @@ function getFactFromStorage() {
     return localStorage.getItem('dailyFact');
 }
 
-async function fetchQuote() {
+async function fetchQuote(forceNew = false) {
     if (!forceNew && !isNewDay()) {
         const cachedQuote = getQuoteFromStorage();
         if (cachedQuote) {
@@ -77,8 +77,8 @@ async function fetchQuote() {
         }
         const data = await response.json();
         currentQuote = {
-            text: data.content,
-            author: data.author
+            text: data[0].q,
+            author: data[0].a
         };
         saveQuoteToStorage(currentQuote);
         displayQuote();
@@ -118,7 +118,7 @@ function getNewQuote() {
     showToast('Loading new quote...');
 }
 
-async function fetchFact() {
+async function fetchFact(forceNew = false) {
     if (!forceNew && !isNewDay()) {
         const cachedFact = getFactFromStorage();
         if (cachedFact) {
