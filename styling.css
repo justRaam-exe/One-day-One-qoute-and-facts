@@ -101,6 +101,8 @@ body {
     font-size: 50px;
     text-align: center;
     margin-bottom: 20px;
+    color: #667eea;
+    opacity: 0.2;
 }
 
 .fact-text {
