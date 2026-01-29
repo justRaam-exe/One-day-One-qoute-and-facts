@@ -1,6 +1,7 @@
 # Byte Snack - One Day One Qoutes and Facts
 
 Website auto-generate **Qoute of the Day** and **One Day One Fact**. Build with pure HTML, CSS, and JavaScript.
+<br>
 You can access the website using the following link : https://quotes-api-brown.vercel.app/
 
 ---
